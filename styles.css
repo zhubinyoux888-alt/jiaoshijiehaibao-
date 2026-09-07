@@ -580,6 +580,8 @@ button:disabled {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .preview-actions .status-pill {
@@ -591,10 +593,72 @@ button:disabled {
     0 10px 24px rgba(36, 216, 255, 0.08);
 }
 
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px;
+  border: 1px solid rgba(60, 72, 95, 0.82);
+  border-radius: 999px;
+  background: rgba(15, 19, 28, 0.92);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+}
+
+.zoom-btn,
+.zoom-reset {
+  height: 30px;
+  border: 1px solid rgba(36, 216, 255, 0.34);
+  border-radius: 999px;
+  background: rgba(24, 31, 44, 0.92);
+  color: #e8f7ff;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.zoom-btn {
+  width: 30px;
+  padding: 0;
+  font-size: 17px;
+  line-height: 1;
+}
+
+.zoom-reset {
+  padding: 0 11px;
+  font-size: 12px;
+}
+
+.zoom-btn:hover,
+.zoom-reset:hover {
+  border-color: rgba(36, 216, 255, 0.82);
+  background: rgba(36, 216, 255, 0.16);
+  color: #ffffff;
+}
+
+.zoom-btn:disabled,
+.zoom-reset:disabled {
+  cursor: not-allowed;
+  opacity: 0.46;
+}
+
+.zoom-value {
+  min-width: 46px;
+  color: #dbe5f7;
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
 .preview-stage {
   display: grid;
   place-items: center;
   min-height: 650px;
+  padding: 28px;
   border: 1px solid rgba(60, 72, 95, 0.82);
   border-radius: 12px;
   background:
@@ -607,17 +671,18 @@ button:disabled {
   background-size:
     12px 12px,
     auto;
-  overflow: hidden;
+  overflow: auto;
 }
 
 canvas {
   display: block;
-  width: min(430px, 100%);
+  width: min(720px, 100%);
   aspect-ratio: 3 / 4;
   background: #fff;
   box-shadow:
     0 34px 80px rgba(0, 0, 0, 0.46),
     0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: width 160ms ease;
 }
 
 .people-strip {
@@ -712,5 +777,10 @@ canvas {
 
   .preview-header {
     align-items: flex-start;
+    display: grid;
+  }
+
+  .preview-actions {
+    justify-content: flex-start;
   }
 }

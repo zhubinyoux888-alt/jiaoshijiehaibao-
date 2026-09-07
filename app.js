@@ -52,6 +52,7 @@ const state = {
   nativePreviewError: "",
   nativePreviewRequest: 0,
   nativePreviewTimer: null,
+  previewZoom: 1,
 };
 
 const canvas = document.getElementById("posterCanvas");
@@ -100,6 +101,10 @@ const els = {
   downloadPreview: document.getElementById("downloadPreview"),
   batchProcess: document.getElementById("batchProcess"),
   previewTitle: document.getElementById("previewTitle"),
+  zoomOut: document.getElementById("zoomOut"),
+  zoomIn: document.getElementById("zoomIn"),
+  zoomReset: document.getElementById("zoomReset"),
+  zoomValue: document.getElementById("zoomValue"),
   personCounter: document.getElementById("personCounter"),
   peopleStrip: document.getElementById("peopleStrip"),
 };
@@ -342,6 +347,46 @@ function setCanvasSize(width, height) {
   canvas.width = Math.max(1, Math.round(width));
   canvas.height = Math.max(1, Math.round(height));
   canvas.style.aspectRatio = `${canvas.width} / ${canvas.height}`;
+  updatePreviewZoom();
+}
+
+function getPreviewBaseWidth() {
+  const stage = canvas.parentElement;
+  const stageWidth = Math.max(260, (stage?.clientWidth || 760) - 56);
+  const ratio = canvas.width / Math.max(1, canvas.height);
+  const preferredWidth = ratio > 1 ? 760 : 430;
+  return Math.min(preferredWidth, stageWidth);
+}
+
+function updatePreviewZoom() {
+  const zoom = Math.min(2.5, Math.max(0.5, state.previewZoom || 1));
+  state.previewZoom = zoom;
+  const displayWidth = Math.round(getPreviewBaseWidth() * zoom);
+  canvas.style.width = `${displayWidth}px`;
+  canvas.style.maxWidth = zoom <= 1 ? "100%" : "none";
+
+  if (els.zoomValue) {
+    els.zoomValue.textContent = `${Math.round(zoom * 100)}%`;
+  }
+  if (els.zoomOut) {
+    els.zoomOut.disabled = zoom <= 0.5;
+  }
+  if (els.zoomIn) {
+    els.zoomIn.disabled = zoom >= 2.5;
+  }
+  if (els.zoomReset) {
+    els.zoomReset.disabled = Math.abs(zoom - 1) < 0.01;
+  }
+}
+
+function changePreviewZoom(delta) {
+  state.previewZoom = Math.round((state.previewZoom + delta) * 10) / 10;
+  updatePreviewZoom();
+}
+
+function resetPreviewZoom() {
+  state.previewZoom = 1;
+  updatePreviewZoom();
 }
 
 function drawPoster() {
@@ -3395,6 +3440,11 @@ els.nextPerson.addEventListener("click", () => {
   renderPeopleStrip();
 });
 
+els.zoomOut?.addEventListener("click", () => changePreviewZoom(-0.1));
+els.zoomIn?.addEventListener("click", () => changePreviewZoom(0.1));
+els.zoomReset?.addEventListener("click", resetPreviewZoom);
+window.addEventListener("resize", updatePreviewZoom);
+
 els.downloadPreview.addEventListener("click", async () => {
   const row = state.rows[state.activeIndex] || {};
   const name = displayNameForRow(row, state.activeIndex) || "海报预览";
@@ -3423,4 +3473,5 @@ updateDataRequirementText();
 syncMattingValues();
 drawPlaceholder();
 updateChrome();
+updatePreviewZoom();
 loadBuiltInAssets();
