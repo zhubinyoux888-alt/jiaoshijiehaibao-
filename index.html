@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>教师节卡片批量生成工作台</title>
+    <link rel="stylesheet" href="./styles.css?v=20260904-teacher-day" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar" aria-label="工作台标题">
+        <div class="brand-block">
+          <span class="platform-logo" aria-hidden="true"></span>
+          <div class="brand-text">
+            <h1>教师节卡片批量生成工作台</h1>
+          </div>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <aside class="control-panel" aria-label="上传与设置">
+          <div class="panel-block">
+            <div class="block-heading">
+              <span class="step-index">1</span>
+              <h2>工作流模块</h2>
+            </div>
+            <div class="template-module-grid" id="templateModules" aria-label="模板模块选择"></div>
+          </div>
+
+          <div class="panel-block" data-workflow-panel="poster" id="dataPanel">
+            <div class="block-heading">
+              <span class="step-index">2</span>
+              <h2>人员信息表</h2>
+            </div>
+            <label class="drop-zone" for="dataInput" id="dataDrop">
+              <input id="dataInput" type="file" accept=".xlsx,.xls" />
+              <span class="drop-kicker">数据</span>
+              <span class="drop-title">选择人员信息表</span>
+              <span class="drop-meta" id="dataMeta">支持表格文件，固定字段：姓名、所属大区、海报文案、人物</span>
+            </label>
+          </div>
+
+          <div class="panel-block" data-workflow-panel="poster matting avatar3d" id="photosPanel">
+            <div class="block-heading">
+              <span class="step-index">3</span>
+              <h2>人员照片</h2>
+            </div>
+            <label class="drop-zone compact-zone" for="photosInput" id="photosDrop">
+              <input id="photosInput" type="file" accept="image/png,image/jpeg,image/webp" multiple />
+              <span class="drop-kicker">素材</span>
+              <span class="drop-title">选择人员照片</span>
+              <span class="drop-meta" id="photosMeta">支持多选，按人物或姓名字段匹配</span>
+            </label>
+          </div>
+
+          <div class="panel-block" data-workflow-panel="matting" id="mattingPanel">
+            <div class="block-heading">
+              <span class="step-index">3</span>
+              <h2>背景抠图</h2>
+            </div>
+            <div class="matting-card">
+              <div class="matting-control">
+                <label for="mattingTolerance">识别范围</label>
+                <input id="mattingTolerance" type="range" min="24" max="140" value="72" />
+                <span id="mattingToleranceValue">72</span>
+              </div>
+              <div class="matting-control">
+                <label for="mattingFeather">边缘柔化</label>
+                <input id="mattingFeather" type="range" min="0" max="70" value="28" />
+                <span id="mattingFeatherValue">28</span>
+              </div>
+              <div class="action-row">
+                <button class="secondary-btn" id="mattingOriginal" type="button">使用原图</button>
+                <button class="primary-btn" id="removeWhiteBg" type="button">智能背景抠图</button>
+              </div>
+              <div class="action-row">
+                <button class="secondary-btn" id="mattingPrev" type="button">上一张</button>
+                <button class="secondary-btn" id="mattingNext" type="button">下一张</button>
+              </div>
+              <div class="action-row export-row">
+                <button class="primary-btn" id="downloadMattedPreview" type="button">导出当前透明图</button>
+                <button class="success-btn" id="downloadMattedPhotos" type="button">导出透明图压缩包</button>
+              </div>
+              <p class="notice-text compact-notice" id="mattingNotice">优先使用智能人像识别，首次处理会加载模型；照片在浏览器本地处理。</p>
+            </div>
+          </div>
+
+          <div class="panel-block" data-workflow-panel="avatar3d" id="avatar3dPanel">
+            <div class="block-heading">
+              <span class="step-index">3</span>
+              <h2>转换设置</h2>
+            </div>
+            <div class="matting-card">
+              <div class="matting-control select-control">
+                <label for="avatarStyle">转换风格</label>
+                <select id="avatarStyle">
+                  <option value="pixar" selected>皮克斯风格</option>
+                  <option value="business">商务3D风格</option>
+                  <option value="tech">科技数字人风格</option>
+                </select>
+              </div>
+              <div class="action-row">
+                <button class="secondary-btn" id="avatarOriginal" type="button">查看原图</button>
+                <button class="primary-btn" id="generateAvatar3d" type="button">生成3D头像</button>
+              </div>
+              <div class="action-row">
+                <button class="secondary-btn" id="avatarPrev" type="button">上一张</button>
+                <button class="secondary-btn" id="avatarNext" type="button">下一张</button>
+              </div>
+              <div class="action-row export-row">
+                <button class="primary-btn" id="downloadAvatarPreview" type="button">导出当前头像</button>
+                <button class="success-btn" id="downloadAvatarBatch" type="button">导出头像压缩包</button>
+              </div>
+              <p class="notice-text compact-notice" id="avatar3dNotice">上传人物头像后，选择风格并点击生成；输出比例为 3:4，背景为白色。</p>
+            </div>
+          </div>
+
+          <div class="panel-block" data-workflow-panel="poster" id="outputPanel">
+            <div class="block-heading">
+              <span class="step-index">4</span>
+              <h2>输出控制</h2>
+            </div>
+            <div class="action-row">
+              <button class="secondary-btn" id="prevPerson" type="button">上一张</button>
+              <button class="secondary-btn" id="nextPerson" type="button">下一张</button>
+            </div>
+            <div class="action-row export-row">
+              <button class="primary-btn" id="downloadPreview" type="button">导出当前预览图片</button>
+              <button class="success-btn" id="batchProcess" type="button">批量导出所有图片</button>
+            </div>
+            <p class="notice-text" id="generationNotice">
+              当前版本为无设计软件依赖的内置模板模式：先上传教师节卡片表格，再上传讲师照片，即可在浏览器本地批量生成图片。
+            </p>
+          </div>
+        </aside>
+
+        <section class="preview-panel" aria-label="输出图片预览">
+          <div class="preview-header">
+            <div>
+              <p class="eyebrow">输出预览</p>
+              <h2 id="previewTitle">输出图片预览</h2>
+            </div>
+            <div class="preview-actions">
+              <div class="status-pill" id="workflowStatus">等待上传</div>
+              <div class="counter" id="personCounter">0 / 0</div>
+            </div>
+          </div>
+
+          <div class="preview-stage">
+            <canvas id="posterCanvas" width="1080" height="1440"></canvas>
+          </div>
+
+          <div class="people-strip" id="peopleStrip" aria-label="人员预览列表"></div>
+        </section>
+      </section>
+    </main>
+
+    <script src="./template-assets.js?v=20260907-teacher-card-name"></script>
+    <script src="./app.js?v=20260907-teacher-card-name"></script>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "id": "lecturer-poster",
+  "name": "教师节卡片",
+  "source": "教师卡.sketch",
+  "size": {
+    "width": 2800,
+    "height": 1600
+  },
+  "fields": {
+    "teacherName": "讲师姓名",
+    "course": "课程",
+    "thanks": "感谢语",
+    "blessing": "教师节祝福语",
+    "photo": "人物"
+  },
+  "workflow": [
+    "上传人物照片",
+    "上传包含讲师姓名、课程、感谢语、教师节祝福语的表格",
+    "逐行预览并批量导出"
+  ]
+}
