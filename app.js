@@ -574,7 +574,7 @@ function drawTeacherDayCard(options) {
 
   drawTeacherCardText({
     name: fixedValue(row, "teacherName") || fixedValue(row, "name") || "讲师姓名",
-    course: fixedValue(row, "course") || "所授课程：\n《课程一》《课程二》《课程三》",
+    course: fixedValue(row, "course") || "《课程一》《课程二》《课程三》",
     thanks: fixedValue(row, "thanks") || "上传教师节卡片表格后，这里会替换为每一位讲师的感谢语。",
     blessing: fixedValue(row, "blessing") || "教师节快乐，愿成就他人的你，也常被温柔以待。",
     isPlaceholder,
@@ -654,9 +654,8 @@ function drawTeacherCardText(options) {
 
 function normalizeCourseText(value) {
   const text = String(value || "").trim();
-  if (!text) return "所授课程：";
-  if (/^所授课程[:：]/.test(text)) return text;
-  return `所授课程：\n${text}`;
+  if (!text) return "";
+  return text;
 }
 
 function drawTeacherCardName(name) {
