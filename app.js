@@ -11,7 +11,7 @@ const BUILT_IN_TEMPLATES = [
     requiredFields: ["teacherName", "course", "thanks", "blessing"],
     outputPrefix: "教师节卡片",
     assets: {
-      background: "./templates/teacher-day-card/assets/background.png?v=20260908-shizhe-card-label",
+      background: "./templates/teacher-day-card/assets/background.png?v=20260908-sketch-label",
       overlay: "./templates/teacher-day-card/assets/overlay.png?v=20260904-source-nameplate",
     },
     text: {
